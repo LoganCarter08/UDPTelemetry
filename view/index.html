@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Teste</title>
+    <link rel="stylesheet" href="css/materialize.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+    <style>
+        @font-face {
+            font-family: 'digital';
+            src: url('ttf/digital.ttf');
+        }
+
+        tbody {
+            display: block;
+            height: 150px;
+            overflow: auto;
+        }
+
+        thead,
+        tbody tr {
+            display: table;
+            width: 100%;
+            padding-top: 1em;
+            table-layout: fixed;
+        }
+
+        thead {
+            width: calc(100% - 1em)
+        }
+
+        table {
+            width: 100%;
+        }
+
+        #led1,
+        #led2,
+        #led3,
+        #led4,
+        #led5 {
+            background-color: #075200;
+        }
+
+        #led6,
+        #led7,
+        #led8,
+        #led9 {
+            background-color: #958600;
+        }
+
+        #led10,
+        #led11,
+        #led12 {
+            background-color: #770000;
+        }
+
+        .ledYellowOn {
+            background-color: #EED600 !important;
+            box-shadow: 0px 0px 10px #EFE15D;
+        }
+
+        .ledGreenOn {
+            background-color: #0FBA00 !important;
+            box-shadow: 0px 0px 10px #55D64A;
+        }
+
+        .ledRedOn {
+            background-color: #D50303 !important;
+            box-shadow: 0px 0px 10px #F93636;
+        }
+
+        .led {
+            width: 25px;
+            height: 25px;
+            border-radius: 100%;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body style="height:100vh;">
+    <div class="row" style="height: 100%;">
+        <div class="col s3 black white-text" style="height: 100%;">
+
+            <div class="divider"></div>
+            
+        </div>
+        <div class="col s6 black white-text" style="height: 100vh;">
+            <div class="row center" style="margin-bottom:0px;">
+                <span style="font-size:600px;font-family: digital;" id="gear">N</span>
+            </div>
+            <div class="row center" style="margin-bottom:0px;">
+                <div class="col s6">
+                    <h5 style="font-size:20px;margin-top:-100px;">MPH</h5>
+                    <h2 style="font-size:100px;margin-top:-130px; font-family: digital;" id="speed">0</h2>
+                </div>
+                <div class="col s6">
+                    <h5 style="font-size:20px;margin-top:-100px;">RPM</h5>
+                    <h2 style="font-size:100px;margin-top:-130px; font-family: digital;" id="rpm">0</h2>
+                </div>
+            </div>
+        </div>
+		<div class="col s3 black white-text" style="height: 100%;">
+		</div>
+    </div>
+    <script>
+        var obj;
+
+
+        setInterval("request();", 150);
+
+        function request() {
+            axios.get('http://localhost:8080/data').then((res) => {
+                obj = res.data;
+				if (obj.gear == 0) {
+					$('#gear').text('R');
+				} else {
+					$('#gear').text(obj.gear);
+				}
+                $('#speed').text(parseInt(obj.speed));
+                $('#rpm').text(parseInt(obj.currentEngineRpm));
+				if (obj.currentEngineRpm/obj.engineMaxRpm > .8) {
+					document.getElementById("gear").style.color = 'red'
+				} else if (obj.currentEngineRpm/obj.engineMaxRpm > .5) {
+					document.getElementById("gear").style.color = 'yellow'
+				} else {
+					document.getElementById("gear").style.color = 'green'
+				}
+                //changeLeds(8,0,12);
+            });
+
+        };
+    </script>
+    <script src="js/materialize.js"></script>
+</body>
+
+</html>
