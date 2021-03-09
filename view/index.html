@@ -122,7 +122,8 @@
 				} else {
 					$('#gear').text(obj.gear);
 				}
-                $('#speed').text(parseInt(obj.speed));
+                $('#speed').text(parseInt(obj.speed)); 
+				
                 $('#rpm').text(parseInt(obj.currentEngineRpm));
 				if (obj.currentEngineRpm/obj.engineMaxRpm > .8) {
 					document.getElementById("gear").style.color = 'red'
@@ -131,7 +132,6 @@
 				} else {
 					document.getElementById("gear").style.color = 'green'
 				}
-                //changeLeds(8,0,12);
             });
 
         };
